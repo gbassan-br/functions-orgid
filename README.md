@@ -7,6 +7,19 @@ This is an code example on how to use Google Cloud Functions to enrich Audit log
 
 ![Architecture](img/architecture.png)
 
+# Behavior
+
+1. Audit Logs are triggered
+2. Log Router router to pubsub sink based on filter (or exclusion)
+3. Cloud Function are triggered
+    1. Checks log source (Org, Billing or project)
+    2. Checks if Organization strucuture are persisted on Firestore (and valid through TTL)
+    3. If it is, use it as-is
+    3. If not, query google APIs trhough SDK and persist on Firestore
+    4. Enrich audit log message with OrgId and OrgName
+    5. Publish to pubsub topic
+
+
 # Prerequisites
 
 1. Python and terraform knowledge
