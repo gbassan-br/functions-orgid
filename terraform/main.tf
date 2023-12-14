@@ -47,6 +47,27 @@ provider "google" {
   
 }
 
+variable "gcp_service_list" {
+  description ="The list of apis necessary for the project"
+  type = list(string)
+  default = [
+    "cloudfunctions.googleapis.com",
+    "firestore.googleapis.com",
+    "datastore.googleapis.com",
+    "eventarc.googleapis.com",
+    "pubsub.googleapis.com",
+    "logging.googleapis.com",
+    "storage.googleapis.com",
+    "run.googleapis.com"
+  ]
+}
+
+resource "google_project_service" "gcp_services" {
+  for_each = toset(var.gcp_service_list)
+  project = data.google_project.project.project_id
+  service = each.key
+}
+
 resource "random_id" "bucket_prefix" {
   byte_length = 8
 }
