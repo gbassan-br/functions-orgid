@@ -99,17 +99,17 @@ resource "google_organization_iam_member" "functions_org_binding" {
 # this resource should be used since give the billing permissions at the right level
 # for Argolis, this should be done manually on go/argolis page with your @google.com user
 
-# resource "google_billing_account_iam_member" "functions_billing_binding" {
-#     billing_account_id = data.google_billing_account.acct.id
-#     role    = "roles/billing.viewer"
-#     member  = "serviceAccount:${google_service_account.sa-name.email}"
-# }
-
-resource "google_organization_iam_member" "functions_billing_binding" {
-    org_id = data.google_organization.org.org_id
+resource "google_billing_account_iam_member" "functions_billing_binding" {
+    billing_account_id = data.google_billing_account.acct.id
     role    = "roles/billing.viewer"
     member  = "serviceAccount:${google_service_account.sa-name.email}"
 }
+
+# resource "google_organization_iam_member" "functions_billing_binding" {
+#     org_id = data.google_organization.org.org_id
+#     role    = "roles/billing.viewer"
+#     member  = "serviceAccount:${google_service_account.sa-name.email}"
+# }
 resource "google_project_iam_member" "functions_publisher_binding" {
     project = data.google_project.project.project_id
     role    = "roles/pubsub.publisher"
@@ -147,7 +147,9 @@ resource "google_logging_project_sink" "sentinel-sink" {
 
     # Log all WARN or higher severity messages relating to instances
     # TODO Alter to the filter 
-    filter = "resource.type=\"audited_resource\" protoPayload.serviceName=\"datastore.googleapis.com\" log_name=\"projects/${data.google_project.project.project_id}/logs/cloudaudit.googleapis.com%2Fdata_access\" "
+    filter = "<FILTER>"
+    #Example of audit logs related to datastore
+    # filter = "resource.type=\"audited_resource\" protoPayload.serviceName=\"datastore.googleapis.com\" log_name=\"projects/${data.google_project.project.project_id}/logs/cloudaudit.googleapis.com%2Fdata_access\" "
     
     # DO NOT REMOVE this exclusion, it is required to avoid infinite loop
     exclusions {
