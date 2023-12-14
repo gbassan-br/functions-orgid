@@ -1,0 +1,15 @@
+gcloud functions deploy functions-orgid \
+--gen2 \
+--runtime=python312 \
+--region=us-central1 \
+--source=. \
+--entry-point=subscribe \
+--trigger-topic="sentinel_pre" 
+
+
+
+TODO 
+Enable the following APIs
+Cloud functions
+Eventarc
+CloudRun
